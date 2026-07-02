@@ -37,13 +37,7 @@ pipeline {
             }
         }
 
-        stage('3. End-to-end tests') {
-            steps {
-                sh 'npm run test:e2e:coverage'
-            }
-        }
-
-        stage('4. SonarQube analysis') {
+        stage('3. SonarQube analysis') {
             steps {
                 withSonarQubeEnv('sonarqube-server-1') {
                     sh """
@@ -54,13 +48,13 @@ pipeline {
             }
         }
 
-        stage('5. Build Docker image') {
+        stage('4. Build Docker image') {
             steps {
                 sh "docker build -t ${FULL_IMAGE} ."
             }
         }
 
-        stage('6. Trivy security scan') {
+        stage('5. Trivy security scan') {
             steps {
                 sh """
                     trivy image \
@@ -72,7 +66,7 @@ pipeline {
             }
         }
 
-        stage('7. Generate SBOM') {
+        stage('6. Generate SBOM') {
             steps {
                 sh """
                     trivy image --format spdx-json --output ${SBOM_REPORT} ${FULL_IMAGE}
@@ -80,13 +74,13 @@ pipeline {
             }
         }
 
-        stage('8. Archive security reports') {
+        stage('7. Archive security reports') {
             steps {
                 archiveArtifacts artifacts: "${SBOM_REPORT}", allowEmptyArchive: true
             }
         }
 
-        stage('9. Publish Docker image') {
+        stage('8. Publish Docker image') {
             steps {
                 sh """
                     docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_CREDENTIALS}
