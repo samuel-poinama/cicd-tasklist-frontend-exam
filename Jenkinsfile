@@ -32,25 +32,19 @@ pipeline {
             }
         }
 
-        stage('2. Generate Prisma client') {
-            steps {
-                sh 'npx prisma generate'
-            }
-        }
-
-        stage('3. Unit tests') {
+        stage('2. Unit tests') {
             steps {
                 sh 'npm run test:coverage'
             }
         }
 
-        stage('5. End-to-end tests') {
+        stage('3. End-to-end tests') {
             steps {
                 sh 'npm run test:e2e:coverage'
             }
         }
 
-        stage('6. SonarQube analysis') {
+        stage('4. SonarQube analysis') {
             steps {
                 withSonarQubeEnv('sonarqube-server-1') {
                     sh """
@@ -61,13 +55,13 @@ pipeline {
             }
         }
 
-        stage('8. Build Docker image') {
+        stage('5. Build Docker image') {
             steps {
                 sh "docker build -t ${FULL_IMAGE} ."
             }
         }
 
-        stage('9. Trivy security scan') {
+        stage('6. Trivy security scan') {
             steps {
                 sh """
                     trivy image \
@@ -79,13 +73,13 @@ pipeline {
             }
         }
 
-        stage('10. Archive security reports') {
+        stage('7. Archive security reports') {
             steps {
                 archiveArtifacts artifacts: "${TRIVY_REPORT}", allowEmptyArchive: true
             }
         }
 
-        stage('11. Generate SBOM') {
+        stage('8. Generate SBOM') {
             steps {
                 sh """
                     trivy image --format spdx-json --output ${SBOM_REPORT} ${FULL_IMAGE}
@@ -93,7 +87,7 @@ pipeline {
             }
         }
 
-        stage('12. Publish Docker image') {
+        stage('9. Publish Docker image') {
             steps {
                 sh """
                     docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_CREDENTIALS}
