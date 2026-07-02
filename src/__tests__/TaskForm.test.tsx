@@ -11,7 +11,7 @@ describe('TaskForm', () => {
 	});
 
 	it('shows validation error when submitting empty title', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onSubmit = vi.fn();
 		render(<TaskForm onSubmit={onSubmit} />);
 
@@ -22,7 +22,7 @@ describe('TaskForm', () => {
 	});
 
 	it('clears validation error when typing', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		render(<TaskForm onSubmit={vi.fn()} />);
 
 		await user.click(screen.getByRole('button', { name: 'Ajouter' }));
@@ -33,7 +33,7 @@ describe('TaskForm', () => {
 	});
 
 	it('submits trimmed title and description then resets in create mode', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onSubmit = vi.fn();
 		render(<TaskForm onSubmit={onSubmit} />);
 
@@ -49,7 +49,7 @@ describe('TaskForm', () => {
 	});
 
 	it('submits with undefined description when empty', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onSubmit = vi.fn();
 		render(<TaskForm onSubmit={onSubmit} />);
 
@@ -60,7 +60,7 @@ describe('TaskForm', () => {
 	});
 
 	it('renders edit mode with initial values and does not reset', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onSubmit = vi.fn();
 		render(
 			<TaskForm
@@ -80,7 +80,7 @@ describe('TaskForm', () => {
 	});
 
 	it('renders cancel button and calls onCancel', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onCancel = vi.fn();
 		render(<TaskForm onSubmit={vi.fn()} onCancel={onCancel} />);
 

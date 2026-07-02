@@ -45,7 +45,7 @@ describe('TaskItem', () => {
 	});
 
 	it('calls onToggle when checkbox clicked', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onToggle = vi.fn();
 		render(<TaskItem task={task} onToggle={onToggle} onDelete={vi.fn()} onEdit={vi.fn()} />);
 
@@ -54,7 +54,7 @@ describe('TaskItem', () => {
 	});
 
 	it('enters edit mode and saves changes', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onEdit = vi.fn();
 		render(<TaskItem task={task} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={onEdit} />);
 
@@ -72,7 +72,7 @@ describe('TaskItem', () => {
 	});
 
 	it('does not save with empty title', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onEdit = vi.fn();
 		render(<TaskItem task={task} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={onEdit} />);
 
@@ -84,7 +84,7 @@ describe('TaskItem', () => {
 	});
 
 	it('saves with undefined description when cleared', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		const onEdit = vi.fn();
 		render(<TaskItem task={task} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={onEdit} />);
 
@@ -96,7 +96,7 @@ describe('TaskItem', () => {
 	});
 
 	it('cancels edit and restores original values', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		render(<TaskItem task={task} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={vi.fn()} />);
 
 		await user.click(screen.getByRole('button', { name: 'Modifier' }));

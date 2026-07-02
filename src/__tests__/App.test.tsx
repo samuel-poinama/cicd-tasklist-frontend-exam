@@ -41,7 +41,7 @@ describe('App', () => {
 	});
 
 	it('adds a task through the form', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		mockedApi.getTasks.mockResolvedValue([]);
 		mockedApi.createTask.mockResolvedValue(task1);
 
@@ -56,7 +56,7 @@ describe('App', () => {
 	});
 
 	it('handles add task failure gracefully', async () => {
-		const user = userEvent.setup();
+		const user = userEvent.setup({ delay: null });
 		mockedApi.getTasks.mockResolvedValue([]);
 		mockedApi.createTask.mockRejectedValue(new Error('fail'));
 
