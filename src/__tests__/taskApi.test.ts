@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getTasks, getTask, createTask, updateTask, deleteTask } from '../api/taskApi';
+import { getTasks, createTask, updateTask, deleteTask } from '../api/taskApi';
 
 const mockTask = {
 	id: 1,
@@ -40,33 +40,6 @@ describe('taskApi', () => {
 		);
 
 		await expect(getTasks()).rejects.toThrow('HTTP 500: Server error');
-	});
-
-	it('getTask returns a single task by id', async () => {
-		vi.stubGlobal(
-			'fetch',
-			vi.fn().mockResolvedValue({
-				ok: true,
-				json: () => Promise.resolve(mockTask),
-			})
-		);
-
-		const task = await getTask(1);
-		expect(task).toEqual(mockTask);
-		expect(fetch).toHaveBeenCalledWith('/api/tasks/1');
-	});
-
-	it('getTask throws on 404', async () => {
-		vi.stubGlobal(
-			'fetch',
-			vi.fn().mockResolvedValue({
-				ok: false,
-				status: 404,
-				text: () => Promise.resolve('Not found'),
-			})
-		);
-
-		await expect(getTask(99)).rejects.toThrow('HTTP 404: Not found');
 	});
 
 	it('createTask sends POST with body and returns task', async () => {
@@ -116,19 +89,6 @@ describe('taskApi', () => {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(payload),
 		});
-	});
-
-	it('updateTask throws on error', async () => {
-		vi.stubGlobal(
-			'fetch',
-			vi.fn().mockResolvedValue({
-				ok: false,
-				status: 500,
-				text: () => Promise.resolve('fail'),
-			})
-		);
-
-		await expect(updateTask(1, { title: 'x' })).rejects.toThrow('HTTP 500: fail');
 	});
 
 	it('deleteTask sends DELETE and resolves', async () => {

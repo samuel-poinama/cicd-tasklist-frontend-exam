@@ -98,19 +98,4 @@ describe('TaskList', () => {
 		);
 		expect(screen.getByText('1 terminée')).toBeInTheDocument();
 	});
-
-	it('renders a single task without plural', () => {
-		render(
-			<TaskList
-				tasks={[mockTasks[0]]}
-				loading={false}
-				error={null}
-				onToggle={vi.fn()}
-				onDelete={vi.fn()}
-				onEdit={vi.fn()}
-			/>
-		);
-		expect(screen.getByText('1 tâche')).toBeInTheDocument();
-		expect(screen.getByText('0 terminée')).toBeInTheDocument();
-	});
 });

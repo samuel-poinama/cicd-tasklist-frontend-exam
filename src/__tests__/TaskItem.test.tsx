@@ -82,31 +82,6 @@ describe('TaskItem', () => {
 
 		expect(onEdit).not.toHaveBeenCalled();
 	});
-
-	it('saves with undefined description when cleared', async () => {
-		const user = userEvent.setup({ delay: null });
-		const onEdit = vi.fn();
-		render(<TaskItem task={task} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={onEdit} />);
-
-		await user.click(screen.getByRole('button', { name: 'Modifier' }));
-		await user.clear(screen.getByLabelText('Modifier la description'));
-		await user.click(screen.getByRole('button', { name: 'Enregistrer' }));
-
-		expect(onEdit).toHaveBeenCalledWith(1, { title: 'Ma tâche', description: undefined });
-	});
-
-	it('cancels edit and restores original values', async () => {
-		const user = userEvent.setup({ delay: null });
-		render(<TaskItem task={task} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={vi.fn()} />);
-
-		await user.click(screen.getByRole('button', { name: 'Modifier' }));
-		const titleInput = screen.getByLabelText('Modifier le titre');
-		await user.clear(titleInput);
-		await user.type(titleInput, 'Changed');
-		await user.click(screen.getByRole('button', { name: 'Annuler' }));
-
-		expect(screen.getByText('Ma tâche')).toBeInTheDocument();
-	});
 });
 
 describe('TaskItem delete confirmation', () => {

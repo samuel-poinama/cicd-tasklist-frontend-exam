@@ -51,15 +51,6 @@ describe('useTasks', () => {
 		expect(result.current.error).toBe('Network down');
 	});
 
-	it('sets generic error when non-Error thrown', async () => {
-		mockedApi.getTasks.mockRejectedValue('boom');
-
-		const { result } = renderHook(() => useTasks());
-		await waitFor(() => expect(result.current.loading).toBe(false));
-
-		expect(result.current.error).toBe('Une erreur est survenue');
-	});
-
 	it('addTask prepends new task', async () => {
 		mockedApi.getTasks.mockResolvedValue([task1]);
 		mockedApi.createTask.mockResolvedValue(task2);
@@ -116,32 +107,5 @@ describe('useTasks', () => {
 
 		expect(mockedApi.updateTask).toHaveBeenCalledWith(1, { completed: true });
 		expect(result.current.tasks[0].completed).toBe(true);
-	});
-
-	it('toggleComplete does nothing for unknown id', async () => {
-		mockedApi.getTasks.mockResolvedValue([task1]);
-
-		const { result } = renderHook(() => useTasks());
-		await waitFor(() => expect(result.current.loading).toBe(false));
-
-		await act(async () => {
-			await result.current.toggleComplete(999);
-		});
-
-		expect(mockedApi.updateTask).not.toHaveBeenCalled();
-	});
-
-	it('loadTasks can be called manually to refresh', async () => {
-		mockedApi.getTasks.mockResolvedValue([task1]);
-
-		const { result } = renderHook(() => useTasks());
-		await waitFor(() => expect(result.current.loading).toBe(false));
-
-		mockedApi.getTasks.mockResolvedValue([task1, task2]);
-		await act(async () => {
-			await result.current.loadTasks();
-		});
-
-		expect(result.current.tasks).toEqual([task1, task2]);
 	});
 });

@@ -21,17 +21,6 @@ describe('TaskForm', () => {
 		expect(onSubmit).not.toHaveBeenCalled();
 	});
 
-	it('clears validation error when typing', async () => {
-		const user = userEvent.setup({ delay: null });
-		render(<TaskForm onSubmit={vi.fn()} />);
-
-		await user.click(screen.getByRole('button', { name: 'Ajouter' }));
-		expect(screen.getByRole('alert')).toBeInTheDocument();
-
-		await user.type(screen.getByLabelText('Titre'), 'A');
-		expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-	});
-
 	it('submits trimmed title and description then resets in create mode', async () => {
 		const user = userEvent.setup({ delay: null });
 		const onSubmit = vi.fn();

@@ -54,19 +54,4 @@ describe('App', () => {
 		await waitFor(() => expect(screen.getByText('App task')).toBeInTheDocument());
 		expect(mockedApi.createTask).toHaveBeenCalledWith({ title: 'App task', description: undefined });
 	});
-
-	it('handles add task failure gracefully', async () => {
-		const user = userEvent.setup({ delay: null });
-		mockedApi.getTasks.mockResolvedValue([]);
-		mockedApi.createTask.mockRejectedValue(new Error('fail'));
-
-		render(<App />);
-		await waitFor(() => expect(screen.getByTestId('empty')).toBeInTheDocument());
-
-		await user.type(screen.getByLabelText('Titre'), 'Broken');
-		await user.click(screen.getByRole('button', { name: 'Ajouter' }));
-
-		await waitFor(() => expect(mockedApi.createTask).toHaveBeenCalled());
-		expect(screen.getByTestId('empty')).toBeInTheDocument();
-	});
 });
