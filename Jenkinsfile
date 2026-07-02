@@ -20,7 +20,6 @@ pipeline {
         IMAGE_TAG       = "${env.BUILD_NUMBER}"
         FULL_IMAGE      = "${IMAGE_NAME}:${IMAGE_TAG}"
 
-        TRIVY_REPORT    = "trivy.json"
         SBOM_REPORT     = "sbom.json"
     }
 
@@ -73,17 +72,17 @@ pipeline {
             }
         }
 
-        stage('7. Archive security reports') {
-            steps {
-                archiveArtifacts artifacts: "${TRIVY_REPORT}", allowEmptyArchive: true
-            }
-        }
-
-        stage('8. Generate SBOM') {
+        stage('7. Generate SBOM') {
             steps {
                 sh """
                     trivy image --format spdx-json --output ${SBOM_REPORT} ${FULL_IMAGE}
                 """
+            }
+        }
+
+        stage('8. Archive security reports') {
+            steps {
+                archiveArtifacts artifacts: "${SBOM_REPORT}", allowEmptyArchive: true
             }
         }
 
